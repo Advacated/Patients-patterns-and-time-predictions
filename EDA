@@ -1,0 +1,71 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load the dataset
+df = pd.read_csv('/Users/christianrobertson/Desktop/Work/dataset.csv')
+
+# Initial EDA: Visualize the distribution of visit durations across days of the week
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='Day', y='ServiceDurationInSeconds', data=df)
+plt.title('Distribution of Visit Durations Across Days of the Week')
+plt.xlabel('Day of the Week')
+plt.ylabel('Service Duration in Seconds')
+plt.xticks(rotation=45)
+plt.show()
+
+# Initial EDA: Visualize the distribution of visit durations across different times of the day
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='TimeInDay', y='ServiceDurationInSeconds', data=df)
+plt.title('Distribution of Visit Durations Across Times of the Day')
+plt.xlabel('Time of Day')
+plt.ylabel('Service Duration in Seconds')
+plt.show()
+
+# Initial EDA: More detailed temporal patterns
+plt.figure(figsize=(14, 7))
+sns.boxplot(x='Day', y='ServiceDurationInSeconds', hue='TimeInDay', data=df, palette="Set1")
+plt.title('Visit Duration by Day of the Week and Time of Day')
+plt.xlabel('Day of the Week')
+plt.ylabel('Service Duration in Seconds')
+plt.xticks(rotation=45)
+plt.legend(title='Time of Day')
+plt.show()
+
+# Fix for the Correlation Matrix: Compute only for numeric features
+numeric_df = df.select_dtypes(include=[np.number])  # Select only numeric columns
+corr_matrix = numeric_df.corr()  # Compute the correlation matrix
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix for Numeric Features')
+plt.show()
+
+# Additional EDA: Pairplot for numeric features
+sns.pairplot(numeric_df)
+plt.suptitle('Pairplot of Numeric Features', verticalalignment='baseline')
+plt.show()
+
+# Additional EDA: Gender vs. Service Duration
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='Gender', y='ServiceDurationInSeconds', data=df)
+plt.title('Service Duration by Gender')
+plt.xlabel('Gender')
+plt.ylabel('Service Duration in Seconds')
+plt.show()
+
+# Additional EDA: Analyzing Service Duration for Patients with Malignant Cancer
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='MalignantCancer', y='ServiceDurationInSeconds', data=df)
+plt.title('Service Duration for Patients with Malignant Cancer')
+plt.xlabel('Malignant Cancer Presence')
+plt.ylabel('Service Duration in Seconds')
+plt.show()
+
+# Additional EDA: Distribution of Service DurationInSeconds
+plt.figure(figsize=(12, 6))
+sns.histplot(df['ServiceDurationInSeconds'], bins=30, kde=True)
+plt.title('Distribution of Service DurationInSeconds')
+plt.xlabel('Service Duration in Seconds')
+plt.ylabel('Frequency')
+plt.show()
